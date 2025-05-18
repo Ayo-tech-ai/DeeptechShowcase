@@ -86,7 +86,7 @@ def preprocess_image(image):
 # 6. Streamlit Interface
 # -------------------------------
 
-st.title("Rice Disease Detection + Smart Assistant")
+st.title("Rice Disease Detection + AI_Smart Assistant")
 
 uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"])
 
