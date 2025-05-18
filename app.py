@@ -113,7 +113,9 @@ if uploaded_file is not None:
                 context = context_map[disease_key]
                 st.subheader(f"Ask about **{predicted_label}**")
                 question = st.text_input("What do you want to know?")
-                if question:
+                submit_question = st.button("Submit")
+
+                if submit_question and question:
                     with st.spinner("Thinking..."):
                         time.sleep(0.5)
                         result = qa_pipeline(question=question, context=context)
