@@ -3,4 +3,4 @@ torch
 torchvision
 pillow
 gdown
-transformers==4.35.2
+transformers
