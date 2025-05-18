@@ -107,22 +107,26 @@ if uploaded_file is not None:
             st.success(f"Prediction: **{predicted_label}**")
             st.info(f"Confidence Level: {confidence_score:.2f}%")
 
-            # NLP: Show follow-up Q&A for predicted disease
+            # NLP Assistant — updated to ensure reliable submit + answer
             disease_key = predicted_label.lower().replace(" ", "_")
             if disease_key in context_map:
                 context = context_map[disease_key]
                 st.subheader(f"Ask about **{predicted_label}**")
 
-                question = st.text_input("What do you want to know?", key="qa_input")
-                if st.button("Submit"):
-                    st.session_state.submit = True
+                if "show_answer" not in st.session_state:
+                    st.session_state.show_answer = False
 
-                if "submit" in st.session_state and st.session_state.submit and st.session_state.qa_input:
+                question = st.text_input("What do you want to know?", key="user_question")
+                submit = st.button("Submit", key="submit_question")
+
+                if submit:
+                    st.session_state.show_answer = True
+
+                if st.session_state.show_answer and question:
                     with st.spinner("Thinking..."):
-                        time.sleep(0.5)
-                        result = qa_pipeline(question=st.session_state.qa_input, context=context)
+                        result = qa_pipeline(question=question, context=context)
                         st.success("Answer:")
                         st.write(result["answer"])
-                        st.session_state.submit = False
+                        st.session_state.show_answer = False
             else:
                 st.warning("No disease-specific advice available for this prediction.")
