@@ -9,7 +9,7 @@ from transformers import pipeline
 import time
 
 # -------------------------------
-# 1. Load CNN Model
+# 1. Load CNN Model from Google Drive
 # -------------------------------
 
 MODEL_PATH = "RiceClassifier.pth"
@@ -39,7 +39,7 @@ class_names = [
 ]
 
 # -------------------------------
-# 3. Load NLP Model
+# 3. NLP Q&A Model
 # -------------------------------
 
 @st.cache_resource
@@ -49,7 +49,7 @@ def load_qa_model():
 qa_pipeline = load_qa_model()
 
 # -------------------------------
-# 4. Context Map (As You Like It)
+# 4. Disease-Specific Knowledge Base
 # -------------------------------
 
 context_map = {
@@ -83,20 +83,34 @@ def preprocess_image(image):
     return transform(image).unsqueeze(0)
 
 # -------------------------------
-# 6. Streamlit Interface
+# 6. Clear Function
 # -------------------------------
 
-st.title("Rice Disease Detection + Smart Assistant")
+def clear_state():
+    st.session_state.pop("predicted_label", None)
+    st.session_state.pop("confidence", None)
+    st.session_state.pop("last_answer", None)
+    st.session_state.pop("uploaded_file", None)
 
-# ----------- CNN Prediction Section -----------
+# -------------------------------
+# 7. Streamlit UI
+# -------------------------------
 
+st.title("AI Powered 'Rice Disease Detection + Smart Assistant'")
+
+# Clear page button
+if st.button("🔄 Clear and Start Over"):
+    clear_state()
+    st.experimental_rerun()
+
+# Upload section
 st.markdown("### 1. Upload Rice Leaf Image")
 
-uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"], key="uploaded_file")
 
 if uploaded_file:
     image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
     if st.button("Classify Disease"):
         with st.spinner("Classifying..."):
@@ -108,26 +122,25 @@ if uploaded_file:
             label = class_names[predicted_class.item()]
             conf = confidence.item() * 100
 
-            # Store in session
+            # Save result
             st.session_state["predicted_label"] = label
             st.session_state["confidence"] = conf
 
-# Display CNN result if available
+# Show CNN result
 if "predicted_label" in st.session_state:
     st.success(f"Prediction: **{st.session_state.predicted_label}**")
     st.info(f"Confidence Level: {st.session_state.confidence:.2f}%")
 
-# ----------- NLP Q&A Section -----------
-
+# NLP assistant
 st.markdown("---")
 st.markdown("### 2. Ask a Question About Rice Diseases")
 
 with st.form(key="qa_form"):
-    question = st.text_input("Type your question here (e.g. How to treat brown spot?)")
-    submitted = st.form_submit_button("Submit")
+    question = st.text_input("Type your question here (e.g. How to manage rice blast?)")
+    submit = st.form_submit_button("Submit")
 
-    if submitted and question:
-        with st.spinner("Getting answer..."):
+    if submit and question:
+        with st.spinner("Thinking..."):
             disease_key = (
                 st.session_state["predicted_label"].lower().replace(" ", "_")
                 if "predicted_label" in st.session_state
@@ -137,7 +150,6 @@ with st.form(key="qa_form"):
             result = qa_pipeline(question=question, context=context)
             st.session_state["last_answer"] = result["answer"]
 
-# Show the last answer if available
 if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
