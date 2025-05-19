@@ -83,7 +83,7 @@ def preprocess_image(image):
     return transform(image).unsqueeze(0)
 
 # -------------------------------
-# 6. Clear Function
+# 6. Clear State Function
 # -------------------------------
 
 def clear_state():
@@ -93,15 +93,10 @@ def clear_state():
     st.session_state.pop("uploaded_file", None)
 
 # -------------------------------
-# 7. Streamlit UI
+# 7. Streamlit Interface
 # -------------------------------
 
-st.title("AI Powered 'Rice Disease Detection + Smart Assistant'")
-
-# Clear page button
-if st.button("🔄 Clear and Start Over"):
-    clear_state()
-    st.experimental_rerun()
+st.title("Rice Disease Detection + Smart Assistant")
 
 # Upload section
 st.markdown("### 1. Upload Rice Leaf Image")
@@ -153,3 +148,11 @@ with st.form(key="qa_form"):
 if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
+
+# Clear button now at the bottom
+st.markdown("---")
+st.markdown("### Reset App")
+
+if st.button("🔄 Clear and Start Over (Reset All)"):
+    clear_state()
+    st.experimental_rerun()
