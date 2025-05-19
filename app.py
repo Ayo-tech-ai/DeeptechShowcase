@@ -9,7 +9,14 @@ from transformers import pipeline
 import time
 
 # -------------------------------
-# 1. Load CNN Model from Google Drive
+# Safe Reset Trigger
+# -------------------------------
+if st.session_state.get("do_reset"):
+    st.session_state.clear()
+    st.experimental_rerun()
+
+# -------------------------------
+# 1. Load CNN Model
 # -------------------------------
 
 MODEL_PATH = "RiceClassifier.pth"
@@ -49,7 +56,7 @@ def load_qa_model():
 qa_pipeline = load_qa_model()
 
 # -------------------------------
-# 4. Disease-Specific Knowledge Base
+# 4. Full Disease-Specific Knowledge Base
 # -------------------------------
 
 context_map = {
@@ -83,22 +90,12 @@ def preprocess_image(image):
     return transform(image).unsqueeze(0)
 
 # -------------------------------
-# 6. Clear State Function
-# -------------------------------
-
-def clear_state():
-    st.session_state.pop("predicted_label", None)
-    st.session_state.pop("confidence", None)
-    st.session_state.pop("last_answer", None)
-    st.session_state.pop("uploaded_file", None)
-
-# -------------------------------
-# 7. Streamlit Interface
+# 6. Streamlit Interface
 # -------------------------------
 
 st.title("Rice Disease Detection + Smart Assistant")
 
-# Upload section
+# Upload image
 st.markdown("### 1. Upload Rice Leaf Image")
 
 uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"], key="uploaded_file")
@@ -117,16 +114,15 @@ if uploaded_file:
             label = class_names[predicted_class.item()]
             conf = confidence.item() * 100
 
-            # Save result
             st.session_state["predicted_label"] = label
             st.session_state["confidence"] = conf
 
-# Show CNN result
+# Show classification result
 if "predicted_label" in st.session_state:
     st.success(f"Prediction: **{st.session_state.predicted_label}**")
     st.info(f"Confidence Level: {st.session_state.confidence:.2f}%")
 
-# NLP assistant
+# NLP Assistant Section
 st.markdown("---")
 st.markdown("### 2. Ask a Question About Rice Diseases")
 
@@ -149,10 +145,9 @@ if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
 
-# Clear button now at the bottom
+# Reset Section (Now Safe)
 st.markdown("---")
 st.markdown("### Reset App")
 
 if st.button("🔄 Clear and Start Over (Reset All)"):
-    clear_state()
-    st.experimental_rerun()
+    st.session_state["do_reset"] = True
