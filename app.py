@@ -6,6 +6,7 @@ from PIL import Image
 import gdown
 import os
 from transformers import pipeline
+import time
 
 # -------------------------------
 # 1. Load CNN Model
@@ -26,7 +27,7 @@ def load_cnn_model():
 cnn_model = load_cnn_model()
 
 # -------------------------------
-# 2. Class Labels
+# 2. Class Names
 # -------------------------------
 
 class_names = [
@@ -38,7 +39,7 @@ class_names = [
 ]
 
 # -------------------------------
-# 3. Load NLP Q&A Model
+# 3. Load NLP Model
 # -------------------------------
 
 @st.cache_resource
@@ -48,36 +49,25 @@ def load_qa_model():
 qa_pipeline = load_qa_model()
 
 # -------------------------------
-# 4. Rice Disease Knowledge Base
+# 4. Context Map (As You Like It)
 # -------------------------------
 
-context = """
-Rice is affected by various diseases with significant impacts on yield. Bacterial Leaf Blight is caused by the bacterium Xanthomonas oryzae pv. oryzae. It presents symptoms like water-soaked lesions, yellowing, and wilting, and may lead to up to 70% yield loss. Control involves resistant varieties, copper sprays, and crop rotation.
-
-Bacterial Leaf Streak is caused by Xanthomonas oryzae pv. oryzicola. It causes water-soaked streaks and yield loss. Managed with resistant varieties and copper hydroxide.
-
-Bakanae Disease is caused by Fusarium fujikuroi. It leads to tall, thin, fragile seedlings. Managed by seed treatment and carbendazim.
-
-Brown Spot is caused by Bipolaris oryzae. Appears as brown bullseyes. Managed with potassium-rich fertilizers and mancozeb.
-
-Rice Grassy Stunt Virus spreads via brown planthopper, causing pale leaves and sterility. Managed by using IR36 and synchronized planting.
-
-Narrow Brown Spot is caused by Cercospora janseana. Symptoms include narrow lesions. Treated with propiconazole and potassium fertilizer.
-
-Rice Ragged Stunt Virus causes distorted and ragged leaves. Managed with resistant strains and IPM practices.
-
-Rice Blast is caused by Magnaporthe oryzae. Appears as diamond lesions. Managed with resistant varieties and tricyclazole.
-
-Rice False Smut creates black-green balls replacing grains. Managed during flowering with propiconazole.
-
-Sheath Blight is caused by Rhizoctonia solani. Forms sheath lesions and leads to lodging. Managed with spacing and validamycin.
-
-Sheath Rot causes grain shriveling. Managed by Trichoderma and fungicides.
-
-Stem Rot caused by Sclerotium oryzae leads to black sclerotia in stems. Managed by crop rotation and silicon.
-
-Tungro Virus is a dual virus spread by green leafhoppers. Leads to stunting and yellowing. Controlled with neem and resistant varieties.
-"""
+context_map = {
+    "rice_blast": """Rice Blast, caused by the fungus Magnaporthe oryzae, forms diamond-shaped lesions and can result in "rotten neck" symptoms. It may lead to total crop failure. Airborne spores and high humidity facilitate its spread. Management includes using resistant varieties and tricyclazole fungicide.""",
+    "bacterial_leaf_blight": """Bacterial Leaf Blight is caused by Xanthomonas oryzae pv. oryzae. It presents symptoms like water-soaked lesions, yellowing, and wilting, and may lead to up to 70% yield loss. Control involves resistant varieties, copper sprays, and crop rotation.""",
+    "bacterial_leaf_streak": """Bacterial Leaf Streak is caused by Xanthomonas oryzae pv. oryzicola. It causes water-soaked streaks and yield loss. Management includes resistant varieties and copper hydroxide.""",
+    "bakanae": """Bakanae Disease, caused by Fusarium fujikuroi, produces tall, fragile seedlings. Managed by seed treatment and carbendazim.""",
+    "brown_spot": """Brown Spot is caused by Bipolaris oryzae. Lesions appear as brown bullseyes. Treated with mancozeb and balanced fertilization.""",
+    "grassy_stunt_virus": """Rice Grassy Stunt Virus (RGSV) leads to pale leaves and stunted growth. Controlled by using resistant varieties like IR36.""",
+    "narrow_brown_spot": """Caused by Cercospora janseana, this disease shows up as narrow streaks. Managed with propiconazole and potassium fertilization.""",
+    "ragged_stunt_virus": """Rice Ragged Stunt Virus causes ragged leaves and stunted plants. Managed through IPM and resistant strains.""",
+    "rice_false_smut": """False Smut forms black-green spore balls. Reduces yield and spreads during flowering. Treated with propiconazole.""",
+    "sheath_blight": """Caused by Rhizoctonia solani. Produces sheath lesions. Controlled using validamycin and crop spacing.""",
+    "sheath_rot": """Sheath Rot causes grain shriveling and rot. Managed with carbendazim and Trichoderma.""",
+    "stem_rot": """Stem Rot involves black sclerotia in the stem. Caused by Sclerotium oryzae. Managed by crop rotation and silicon treatment.""",
+    "tungro_virus": """Tungro is caused by two viruses and spread by green leafhoppers. It results in stunting and yellowing. Controlled with neem spray and resistant varieties.""",
+    "healthy_rice_plant": """This plant appears to be healthy. No treatment is required. You may ask about disease prevention if you wish."""
+}
 
 # -------------------------------
 # 5. Image Preprocessing
@@ -93,12 +83,14 @@ def preprocess_image(image):
     return transform(image).unsqueeze(0)
 
 # -------------------------------
-# 6. App Layout
+# 6. Streamlit Interface
 # -------------------------------
 
-st.title("SmartAgri AI Assistant")
+st.title("Rice Disease Detection + Smart Assistant")
 
-st.markdown("### 1. Upload Rice Leaf Image for Disease Prediction")
+# ----------- CNN Prediction Section -----------
+
+st.markdown("### 1. Upload Rice Leaf Image")
 
 uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"])
 
@@ -107,7 +99,7 @@ if uploaded_file:
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
     if st.button("Classify Disease"):
-        with st.spinner("Analyzing image..."):
+        with st.spinner("Classifying..."):
             input_tensor = preprocess_image(image)
             outputs = cnn_model(input_tensor)
             probs = F.softmax(outputs, dim=1)
@@ -116,19 +108,36 @@ if uploaded_file:
             label = class_names[predicted_class.item()]
             conf = confidence.item() * 100
 
-            st.success(f"**Prediction:** {label}")
-            st.info(f"**Confidence Level:** {conf:.2f}%")
+            # Store in session
+            st.session_state["predicted_label"] = label
+            st.session_state["confidence"] = conf
 
-# -------------------------------
+# Display CNN result if available
+if "predicted_label" in st.session_state:
+    st.success(f"Prediction: **{st.session_state.predicted_label}**")
+    st.info(f"Confidence Level: {st.session_state.confidence:.2f}%")
+
+# ----------- NLP Q&A Section -----------
+
 st.markdown("---")
 st.markdown("### 2. Ask a Question About Rice Diseases")
 
 with st.form(key="qa_form"):
-    question = st.text_input("Type your question here (e.g., How to treat rice blast?)")
-    submit = st.form_submit_button("Get Answer")
+    question = st.text_input("Type your question here (e.g. How to treat brown spot?)")
+    submitted = st.form_submit_button("Submit")
 
-    if submit and question:
-        with st.spinner("Answering..."):
+    if submitted and question:
+        with st.spinner("Getting answer..."):
+            disease_key = (
+                st.session_state["predicted_label"].lower().replace(" ", "_")
+                if "predicted_label" in st.session_state
+                else None
+            )
+            context = context_map.get(disease_key, "\n".join(context_map.values()))
             result = qa_pipeline(question=question, context=context)
-            st.success("Answer:")
-            st.write(result["answer"])
+            st.session_state["last_answer"] = result["answer"]
+
+# Show the last answer if available
+if "last_answer" in st.session_state:
+    st.success("Answer:")
+    st.write(st.session_state["last_answer"])
