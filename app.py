@@ -9,14 +9,7 @@ from transformers import pipeline
 import time
 
 # -------------------------------
-# Safe Reset Trigger
-# -------------------------------
-if st.session_state.get("do_reset"):
-    st.session_state.clear()
-    st.experimental_rerun()
-
-# -------------------------------
-# 1. Load CNN Model
+# 1. Load CNN Model from Google Drive
 # -------------------------------
 
 MODEL_PATH = "RiceClassifier.pth"
@@ -56,7 +49,7 @@ def load_qa_model():
 qa_pipeline = load_qa_model()
 
 # -------------------------------
-# 4. Full Disease-Specific Knowledge Base
+# 4. Disease-Specific Knowledge Base
 # -------------------------------
 
 context_map = {
@@ -95,7 +88,7 @@ def preprocess_image(image):
 
 st.title("Rice Disease Detection + Smart Assistant")
 
-# Upload image
+# Upload Section
 st.markdown("### 1. Upload Rice Leaf Image")
 
 uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"], key="uploaded_file")
@@ -117,12 +110,12 @@ if uploaded_file:
             st.session_state["predicted_label"] = label
             st.session_state["confidence"] = conf
 
-# Show classification result
+# Show CNN result
 if "predicted_label" in st.session_state:
     st.success(f"Prediction: **{st.session_state.predicted_label}**")
     st.info(f"Confidence Level: {st.session_state.confidence:.2f}%")
 
-# NLP Assistant Section
+# NLP Assistant
 st.markdown("---")
 st.markdown("### 2. Ask a Question About Rice Diseases")
 
@@ -145,9 +138,16 @@ if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
 
-# Reset Section (Now Safe)
+# ----------------------------------------
+# 7. Manual Clear Button (No rerun needed)
+# ----------------------------------------
+
 st.markdown("---")
 st.markdown("### Reset App")
 
-if st.button("🔄 Clear and Start Over (Reset All)"):
-    st.session_state["do_reset"] = True
+if st.button("🔄 Clear and Start Over"):
+    keys_to_clear = ["predicted_label", "confidence", "last_answer", "uploaded_file"]
+    for key in keys_to_clear:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.success("Session reset! You may now upload a new image or ask a new question.")
