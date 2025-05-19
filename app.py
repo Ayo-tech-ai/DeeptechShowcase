@@ -138,10 +138,7 @@ if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
 
-# ----------------------------------------
-# 7. Manual Clear Button (No rerun needed)
-# ----------------------------------------
-
+# Clear Button — Correctly placed after NLP
 st.markdown("---")
 st.markdown("### Reset App")
 
