@@ -86,7 +86,7 @@ def preprocess_image(image):
 # 6. Streamlit Interface
 # -------------------------------
 
-st.title("Rice Disease Detection + Smart Assistant")
+st.title("AI-Powered LeafScan Assistant")
 
 # Upload Section
 st.markdown("### 1. Upload Rice Leaf Image")
