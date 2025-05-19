@@ -86,47 +86,40 @@ def preprocess_image(image):
 # 6. Streamlit Interface
 # -------------------------------
 
-st.title("Rice Disease Detection + AI_Smart Assistant")
+st.title("AI Powered Rice Disease Detection + Smart Assistant")
 
 uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"])
 
-if uploaded_file is not None:
+if uploaded_file:
     image = Image.open(uploaded_file)
     st.image(image, caption='Uploaded Image', use_column_width=True)
 
     if st.button("Classify Disease"):
-        with st.spinner("Classifying with CNN..."):
-            input_tensor = preprocess_image(image)
-            outputs = cnn_model(input_tensor)
-            probs = F.softmax(outputs, dim=1)
-            confidence, predicted_class = torch.max(probs, 1)
+        input_tensor = preprocess_image(image)
+        outputs = cnn_model(input_tensor)
+        probs = F.softmax(outputs, dim=1)
+        confidence, predicted_class = torch.max(probs, 1)
 
-            predicted_label = class_names[predicted_class.item()]
-            confidence_score = confidence.item() * 100
+        predicted_label = class_names[predicted_class.item()]
+        confidence_score = confidence.item() * 100
 
-            st.success(f"Prediction: **{predicted_label}**")
-            st.info(f"Confidence Level: {confidence_score:.2f}%")
+        st.success(f"Prediction: **{predicted_label}**")
+        st.info(f"Confidence Level: {confidence_score:.2f}%")
 
-            # NLP Assistant — updated to ensure reliable submit + answer
-            disease_key = predicted_label.lower().replace(" ", "_")
-            if disease_key in context_map:
-                context = context_map[disease_key]
-                st.subheader(f"Ask about **{predicted_label}**")
+        disease_key = predicted_label.lower().replace(" ", "_")
 
-                if "show_answer" not in st.session_state:
-                    st.session_state.show_answer = False
+        if disease_key in context_map:
+            context = context_map[disease_key]
+            st.subheader(f"Ask a question about **{predicted_label}**")
 
-                question = st.text_input("What do you want to know?", key="user_question")
-                submit = st.button("Submit", key="submit_question")
+            with st.form(key="qa_form"):
+                question = st.text_input("Your question:")
+                submitted = st.form_submit_button("Submit")
 
-                if submit:
-                    st.session_state.show_answer = True
-
-                if st.session_state.show_answer and question:
-                    with st.spinner("Thinking..."):
+                if submitted and question:
+                    with st.spinner("Getting answer..."):
                         result = qa_pipeline(question=question, context=context)
                         st.success("Answer:")
                         st.write(result["answer"])
-                        st.session_state.show_answer = False
-            else:
-                st.warning("No disease-specific advice available for this prediction.")
+        else:
+            st.warning("No disease-specific assistant available.")
