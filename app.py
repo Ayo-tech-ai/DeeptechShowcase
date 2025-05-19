@@ -9,6 +9,23 @@ from transformers import pipeline
 import time
 
 # -------------------------------
+# UI Title & Description
+# -------------------------------
+st.set_page_config(page_title="AI-Powered LeafScan Assistant", layout="centered")
+st.title("🌾 AI-Powered LeafScan Assistant")
+st.markdown("*An AI assistant for detecting rice leaf diseases and providing expert guidance*")
+
+# -------------------------------
+# Sidebar (Optional Info)
+# -------------------------------
+with st.sidebar:
+    st.header("About")
+    st.write("This app uses a Convolutional Neural Network (CNN) to classify rice leaf diseases and a transformer-based NLP model to answer user questions.")
+    st.markdown("**Built for:** 3MTT DeepTech Showcase")
+    st.markdown("**Creator:** Your Name Here")
+    st.markdown("[GitHub Repo](https://github.com/your-repo-link)")
+
+# -------------------------------
 # 1. Load CNN Model from Google Drive
 # -------------------------------
 
@@ -53,20 +70,20 @@ qa_pipeline = load_qa_model()
 # -------------------------------
 
 context_map = {
-    "rice_blast": """Rice Blast, caused by the fungus Magnaporthe oryzae, forms diamond-shaped lesions and can result in "rotten neck" symptoms. It may lead to total crop failure. Airborne spores and high humidity facilitate its spread. Management includes using resistant varieties and tricyclazole fungicide.""",
-    "bacterial_leaf_blight": """Bacterial Leaf Blight is caused by Xanthomonas oryzae pv. oryzae. It presents symptoms like water-soaked lesions, yellowing, and wilting, and may lead to up to 70% yield loss. Control involves resistant varieties, copper sprays, and crop rotation.""",
-    "bacterial_leaf_streak": """Bacterial Leaf Streak is caused by Xanthomonas oryzae pv. oryzicola. It causes water-soaked streaks and yield loss. Management includes resistant varieties and copper hydroxide.""",
-    "bakanae": """Bakanae Disease, caused by Fusarium fujikuroi, produces tall, fragile seedlings. Managed by seed treatment and carbendazim.""",
-    "brown_spot": """Brown Spot is caused by Bipolaris oryzae. Lesions appear as brown bullseyes. Treated with mancozeb and balanced fertilization.""",
-    "grassy_stunt_virus": """Rice Grassy Stunt Virus (RGSV) leads to pale leaves and stunted growth. Controlled by using resistant varieties like IR36.""",
-    "narrow_brown_spot": """Caused by Cercospora janseana, this disease shows up as narrow streaks. Managed with propiconazole and potassium fertilization.""",
-    "ragged_stunt_virus": """Rice Ragged Stunt Virus causes ragged leaves and stunted plants. Managed through IPM and resistant strains.""",
-    "rice_false_smut": """False Smut forms black-green spore balls. Reduces yield and spreads during flowering. Treated with propiconazole.""",
-    "sheath_blight": """Caused by Rhizoctonia solani. Produces sheath lesions. Controlled using validamycin and crop spacing.""",
-    "sheath_rot": """Sheath Rot causes grain shriveling and rot. Managed with carbendazim and Trichoderma.""",
-    "stem_rot": """Stem Rot involves black sclerotia in the stem. Caused by Sclerotium oryzae. Managed by crop rotation and silicon treatment.""",
-    "tungro_virus": """Tungro is caused by two viruses and spread by green leafhoppers. It results in stunting and yellowing. Controlled with neem spray and resistant varieties.""",
-    "healthy_rice_plant": """This plant appears to be healthy. No treatment is required. You may ask about disease prevention if you wish."""
+    "rice_blast": """Rice Blast, caused by the fungus Magnaporthe oryzae, ...""",
+    "bacterial_leaf_blight": """Bacterial Leaf Blight is caused by Xanthomonas oryzae pv. oryzae. ...""",
+    "bacterial_leaf_streak": """Bacterial Leaf Streak is caused by Xanthomonas oryzae pv. oryzicola. ...""",
+    "bakanae": """Bakanae Disease, caused by Fusarium fujikuroi, ...""",
+    "brown_spot": """Brown Spot is caused by Bipolaris oryzae. ...""",
+    "grassy_stunt_virus": """Rice Grassy Stunt Virus (RGSV) leads to pale leaves and stunted growth. ...""",
+    "narrow_brown_spot": """Caused by Cercospora janseana, this disease shows up as narrow streaks. ...""",
+    "ragged_stunt_virus": """Rice Ragged Stunt Virus causes ragged leaves and stunted plants. ...""",
+    "rice_false_smut": """False Smut forms black-green spore balls. ...""",
+    "sheath_blight": """Caused by Rhizoctonia solani. Produces sheath lesions. ...""",
+    "sheath_rot": """Sheath Rot causes grain shriveling and rot. ...""",
+    "stem_rot": """Stem Rot involves black sclerotia in the stem. ...""",
+    "tungro_virus": """Tungro is caused by two viruses and spread by green leafhoppers. ...""",
+    "healthy_rice_plant": """This plant appears to be healthy. No treatment is required. ..."""
 }
 
 # -------------------------------
@@ -83,13 +100,10 @@ def preprocess_image(image):
     return transform(image).unsqueeze(0)
 
 # -------------------------------
-# 6. Streamlit Interface
+# Step 1: Upload + Diagnose
 # -------------------------------
 
-st.title("AI-Powered LeafScan Assistant")
-
-# Upload Section
-st.markdown("### 1. Upload Rice Leaf Image")
+st.markdown("## Step 1: Upload & Diagnose")
 
 uploaded_file = st.file_uploader("Upload a rice leaf image", type=["jpg", "jpeg", "png"], key="uploaded_file")
 
@@ -112,15 +126,17 @@ if uploaded_file:
 
 # Show CNN result
 if "predicted_label" in st.session_state:
-    st.success(f"Prediction: **{st.session_state.predicted_label}**")
-    st.info(f"Confidence Level: {st.session_state.confidence:.2f}%")
+    st.success(f"**Disease Predicted:** {st.session_state.predicted_label}")
+    st.info(f"**Confidence Level:** {st.session_state.confidence:.2f}%")
 
-# NLP Assistant
-st.markdown("---")
-st.markdown("### 2. Ask a Question About Rice Diseases")
+# -------------------------------
+# Step 2: Ask the Assistant
+# -------------------------------
+
+st.markdown("## Step 2: Ask the Smart Assistant")
 
 with st.form(key="qa_form"):
-    question = st.text_input("Type your question here (e.g. How to manage rice blast?)")
+    question = st.text_input("Ask a question about rice diseases (e.g. How do I treat rice blast?)")
     submit = st.form_submit_button("Submit")
 
     if submit and question:
@@ -138,7 +154,10 @@ if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
 
-# Clear Button — Correctly placed after NLP
+# -------------------------------
+# Clear Button (Moved to Bottom)
+# -------------------------------
+
 st.markdown("---")
 st.markdown("### Reset App")
 
@@ -148,3 +167,10 @@ if st.button("🔄 Clear and Start Over"):
         if key in st.session_state:
             del st.session_state[key]
     st.success("Session reset! You may now upload a new image or ask a new question.")
+
+# -------------------------------
+# Footer
+# -------------------------------
+
+st.markdown("---")
+st.caption("Powered by PyTorch, HuggingFace Transformers & Streamlit | Built for the 3MTT DeepTech Showcase")
