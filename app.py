@@ -23,7 +23,7 @@ with st.sidebar:
     st.write("This app uses a Convolutional Neural Network (CNN) to classify rice leaf diseases and a transformer-based NLP model to answer user questions.")
     st.markdown("**Built for:** 3MTT Monthly Showcase")
     st.markdown("**Creator:** Ayoola Mujib Ayodele")
-    st.markdown("[GitHub Repo](https://github.com/your-repo-link)")
+    st.markdown("[GitHub Repo](https://github.com/Ayo-tech-ai/DeeptechShowcase)")
 
 # -------------------------------
 # 1. Load CNN Model from Google Drive
