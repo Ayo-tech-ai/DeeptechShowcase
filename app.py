@@ -21,8 +21,8 @@ st.markdown("*An AI assistant for detecting rice leaf diseases and providing exp
 with st.sidebar:
     st.header("About")
     st.write("This app uses a Convolutional Neural Network (CNN) to classify rice leaf diseases and a transformer-based NLP model to answer user questions.")
-    st.markdown("**Built for:** 3MTT DeepTech Showcase")
-    st.markdown("**Creator:** Your Name Here")
+    st.markdown("**Built for:** 3MTT Monthly Showcase")
+    st.markdown("**Creator:** Ayoola Mujib Ayodele")
     st.markdown("[GitHub Repo](https://github.com/your-repo-link)")
 
 # -------------------------------
@@ -173,4 +173,4 @@ if st.button("🔄 Clear and Start Over"):
 # -------------------------------
 
 st.markdown("---")
-st.caption("Powered by PyTorch, HuggingFace Transformers & Streamlit | Built for the 3MTT DeepTech Showcase")
+st.caption("Powered by PyTorch, HuggingFace Transformers & Streamlit | Built for the 3MTT May Showcase")
