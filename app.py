@@ -9,6 +9,41 @@ from transformers import pipeline
 import time
 
 # -------------------------------
+# Custom CSS for background images
+# -------------------------------
+st.markdown(
+    f"""
+    <style>
+    /* Main background with dark overlay */
+    .stApp::before {{
+        content: "";
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                    url("https://raw.githubusercontent.com/Ayo-tech-ai/DeeptechShowcase/refs/heads/main/main_background.jpeg");
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+    }}
+
+    /* Sidebar background with overlay */
+    section[data-testid="stSidebar"] > div:first-child {{
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                    url("https://raw.githubusercontent.com/Ayo-tech-ai/DeeptechShowcase/refs/heads/main/sidebar_background.jpeg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# -------------------------------
 # UI Title & Description
 # -------------------------------
 st.set_page_config(page_title="AI-Powered LeafScan Assistant", layout="centered")
@@ -71,34 +106,20 @@ qa_pipeline = load_qa_model()
 
 context_map = {
     "rice_blast": "Rice Blast is caused by Magnaporthe oryzae. It can lead to rotten neck symptoms and severe yield loss. It can be managed using resistant varieties or fungicides like tricyclazole.",
-
     "bacterial_leaf_blight": "Bacterial Leaf Blight is caused by Xanthomonas oryzae. It can cause leaf wilting and up to 70% yield loss. It can be managed with resistant varieties or copper-based sprays.",
-
     "bacterial_leaf_streak": "Bacterial Leaf Streak is caused by Xanthomonas oryzicola. It can reduce photosynthesis and grain filling. It can be managed using resistant varieties or copper hydroxide treatments.",
-
     "bakanae": "Bakanae disease is caused by Fusarium fujikuroi. It can lead to tall, weak seedlings and plant death. It can be managed by hot water seed treatment or carbendazim application.",
-
     "brown_spot": "Brown Spot is caused by Bipolaris oryzae. It can reduce yield by damaging older leaves. It can be managed with mancozeb or potassium-rich fertilizers.",
-
     "grassy_stunt_virus": "Grassy Stunt is caused by a virus spread by brown planthoppers. It can lead to stunted plants with few grains. It can be managed by planting resistant varieties or controlling vectors.",
-
     "narrow_brown_spot": "Narrow Brown Spot is caused by Cercospora janseana. It can reduce grain quality and photosynthesis. It can be managed using potassium fertilizer or propiconazole spray.",
-
     "ragged_stunt_virus": "Ragged Stunt Virus is transmitted by brown planthoppers. It can cause twisted leaves and poor grain development. It can be managed using resistant varieties or IPM strategies.",
-
     "rice_false_smut": "False Smut is caused by Ustilaginoidea virens. It can contaminate rice grains with spore balls and toxins. It can be managed by spraying propiconazole or using clean seeds.",
-
     "sheath_blight": "Sheath Blight is caused by Rhizoctonia solani. It can cause lodging and 20–50% yield loss. It can be managed with validamycin or wider plant spacing.",
-
     "sheath_rot": "Sheath Rot is caused by Sarocladium oryzae. It can lead to unfilled grains and rot. It can be managed using carbendazim or Trichoderma-based treatments.",
-
     "stem_rot": "Stem Rot is caused by Sclerotium oryzae. It can result in lodging and poor grain filling. It can be managed by crop rotation or silicon application.",
-
     "tungro_virus": "Tungro is caused by two viruses spread by green leafhoppers. It can cause stunted, yellow-orange plants. It can be managed using resistant cultivars or neem sprays.",
-
     "healthy_rice_plant": "This plant appears to be healthy. No treatment is required. You may ask about disease prevention or general crop care if you wish."
 }
-
 
 # -------------------------------
 # 5. Image Preprocessing
