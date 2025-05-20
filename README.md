@@ -105,18 +105,3 @@ pip install -r requirements.txt
 streamlit run app.py
 
 > Note: The model will automatically be downloaded from Google Drive on first run.
-
-
-
-
----
-
-
-
-### You can now:
-- Copy this and paste it into your `README.md` on GitHub
-- Add screenshots later for more engagement
-- Let me know if you want a professional `requirements.txt` or a one-page pitch for the showcase
-
-Would you like those next?
-
