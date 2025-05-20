@@ -70,21 +70,35 @@ qa_pipeline = load_qa_model()
 # -------------------------------
 
 context_map = {
-    "rice_blast": """Rice Blast, caused by the fungus Magnaporthe oryzae, ...""",
-    "bacterial_leaf_blight": """Bacterial Leaf Blight is caused by Xanthomonas oryzae pv. oryzae. ...""",
-    "bacterial_leaf_streak": """Bacterial Leaf Streak is caused by Xanthomonas oryzae pv. oryzicola. ...""",
-    "bakanae": """Bakanae Disease, caused by Fusarium fujikuroi, ...""",
-    "brown_spot": """Brown Spot is caused by Bipolaris oryzae. ...""",
-    "grassy_stunt_virus": """Rice Grassy Stunt Virus (RGSV) leads to pale leaves and stunted growth. ...""",
-    "narrow_brown_spot": """Caused by Cercospora janseana, this disease shows up as narrow streaks. ...""",
-    "ragged_stunt_virus": """Rice Ragged Stunt Virus causes ragged leaves and stunted plants. ...""",
-    "rice_false_smut": """False Smut forms black-green spore balls. ...""",
-    "sheath_blight": """Caused by Rhizoctonia solani. Produces sheath lesions. ...""",
-    "sheath_rot": """Sheath Rot causes grain shriveling and rot. ...""",
-    "stem_rot": """Stem Rot involves black sclerotia in the stem. ...""",
-    "tungro_virus": """Tungro is caused by two viruses and spread by green leafhoppers. ...""",
-    "healthy_rice_plant": """This plant appears to be healthy. No treatment is required. ..."""
+    "rice_blast": """Rice Blast is caused by the fungus Magnaporthe oryzae. It typically forms diamond-shaped or spindle lesions with gray centers and brown margins. The disease can lead to rotten neck symptoms, severely reducing grain production and causing total crop failure in severe cases. It spreads through airborne spores and thrives in high humidity. Management includes using resistant varieties like IR64 and applying fungicides such as tricyclazole.""",
+
+    "bacterial_leaf_blight": """Bacterial Leaf Blight is caused by the bacterium Xanthomonas oryzae pv. oryzae. Early symptoms include water-soaked leaf tips that turn yellow and wilt. It can lead to up to 70% yield loss and spreads rapidly through rain, irrigation water, and infected seeds. Farmers can manage it using resistant rice varieties, copper-based sprays, clean seeds, and crop rotation.""",
+
+    "bacterial_leaf_streak": """Bacterial Leaf Streak is caused by Xanthomonas oryzae pv. oryzicola, a bacterial pathogen. It appears as narrow, water-soaked streaks between the veins that later turn yellow-brown. The disease reduces photosynthesis and grain filling, causing yield losses up to 30%. Management involves resistant varieties like IR50 and spraying with copper hydroxide.""",
+
+    "bakanae": """Bakanae disease is caused by the fungus Fusarium fujikuroi. It results in tall, thin, pale seedlings with weak stems that may die early. The infection spreads through contaminated seeds and soil, often leading to significant plant loss. Control measures include hot water seed treatment and fungicide application, particularly with carbendazim.""",
+
+    "brown_spot": """Brown Spot is caused by the fungus Bipolaris oryzae. It produces brown circular lesions with a light center and dark margin, especially on older leaves. The disease can reduce yield by up to 90% under poor soil conditions. Management includes improving soil fertility with potassium or silicon and applying fungicides like mancozeb.""",
+
+    "grassy_stunt_virus": """Rice Grassy Stunt Virus (RGSV) is a viral disease spread by the brown planthopper. Infected plants show pale, narrow leaves and stunted growth with few or no grains. It can result in complete crop failure. Control includes planting resistant varieties such as IR36 and practicing synchronized planting and insect management.""",
+
+    "narrow_brown_spot": """Narrow Brown Spot is caused by the fungus Cercospora janseana. It causes elongated, brown streaks mostly along leaf veins. The disease affects photosynthesis and reduces grain quality. It is managed by applying potassium fertilizer and fungicides like propiconazole.""",
+
+    "ragged_stunt_virus": """Rice Ragged Stunt Virus (RRSV) is transmitted by brown planthoppers. It causes ragged, twisted, and shortened leaves with stunted plants and malformed grains. The virus can reduce yields by over 50%. Management involves using resistant rice varieties like IR72 and controlling vector populations through integrated pest management.""",
+
+    "rice_false_smut": """Rice False Smut is caused by the fungus Ustilaginoidea virens. It replaces rice grains with greenish-black spore balls and contaminates the harvest with mycotoxins. The disease spreads during flowering in humid conditions. Management includes spraying propiconazole at the booting stage and using clean seeds.""",
+
+    "sheath_blight": """Sheath Blight is caused by the soil-borne fungus Rhizoctonia solani. Symptoms include oval lesions on the sheath near the waterline that spread upward, leading to lodging. It can cause 20–50% yield loss under dense planting. Management includes wider spacing, using resistant varieties, and applying fungicides like validamycin.""",
+
+    "sheath_rot": """Sheath Rot is caused by the fungus Sarocladium oryzae. It produces brown to dark lesions on the sheath, leading to rotting of spikelets and unfilled grains. The disease spreads via air and wounds, and may lead to yield losses of up to 85%. Control involves spraying carbendazim and applying biological control agents like Trichoderma.""",
+
+    "stem_rot": """Stem Rot is caused by the fungus Sclerotium oryzae, identified by the presence of black sclerotia inside stems. It causes stem lodging, poor grain filling, and can reduce yield significantly. The pathogen survives in the soil and crop residue. Control includes crop rotation, silicon application, and deep plowing after harvest.""",
+
+    "tungro_virus": """Rice Tungro is a viral disease caused by a combination of Rice Tungro Bacilliform Virus (RTBV) and Rice Tungro Spherical Virus (RTSV), spread by green leafhoppers. Infected plants show yellow-orange discoloration and stunted growth. It can cause total crop failure in susceptible varieties. Control includes planting resistant cultivars like IR36 and using neem-based insecticides to manage vector populations.""",
+
+    "healthy_rice_plant": """This plant appears to be healthy. No treatment is required. You may ask about disease prevention or general crop care if you wish."""
 }
+
 
 # -------------------------------
 # 5. Image Preprocessing
