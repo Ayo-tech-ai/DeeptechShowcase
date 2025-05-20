@@ -1,7 +1,14 @@
 import streamlit as st 
 st.set_page_config(page_title="AI-Powered LeafScan Assistant", layout="centered")
 
-import torch import torch.nn.functional as F import torchvision.transforms as transforms from PIL import Image import gdown import os from transformers import pipeline import time
+import torch 
+import torch.nn.functional as F 
+import torchvision.transforms as transforms 
+from PIL import Image 
+import gdown 
+import os 
+from transformers import pipeline 
+import time
 
 -------------------------------
 
