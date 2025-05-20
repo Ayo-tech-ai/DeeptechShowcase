@@ -53,7 +53,9 @@ This tool makes disease identification faster, more scalable, and accessible dir
 
 
 Ayoola Mujib Ayodele
-LinkedIn Profile
+
+LinkedIn: https://www.linkedin.com/in/ayoolaayodelemujib
+
 Email: ayodelemujibayoola@gmail.com
 
 
