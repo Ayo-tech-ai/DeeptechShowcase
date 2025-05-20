@@ -61,7 +61,7 @@ Email: ayodelemujibayoola@gmail.com
 
 🤝 Contributions
 
-This project was built for the 3MTT DeepTech May Showcase as a demonstration of how AI can power scalable and accessible solutions in agriculture and food security.
+This project was built for the 3MTT May Showcase as a demonstration of how AI can power scalable and accessible solutions in agriculture and food security.
 Suggestions, feedback, and collaborations are welcome!
 
 
