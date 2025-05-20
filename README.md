@@ -60,7 +60,7 @@ streamlit run app.py
 Note: The model will automatically be downloaded from Google Drive on first run.
 
 
-👤 Creator
+##👤 Creator
 
 Ayoola Mujib Ayodele
 LinkedIn : https://www.linkedin.com/in/ayoolaayodelemujib
