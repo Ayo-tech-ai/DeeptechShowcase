@@ -49,8 +49,8 @@ st.markdown(
 # -------------------------------
 # UI Title & Description
 # -------------------------------
-st.title("🌾 AI-Powered LeafScan Assistant")
-st.markdown("*An AI assistant for detecting rice leaf diseases and providing expert guidance*")
+st.title("🌾 AgroScan AI")
+st.markdown("*An AI-powered assistant for detecting rice leaf diseases and providing expert guidance*")
 
 # -------------------------------
 # Sidebar (Optional Info)
