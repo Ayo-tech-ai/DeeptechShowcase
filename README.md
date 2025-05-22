@@ -1,4 +1,4 @@
-# 🌾 AI-Powered LeafScan Assistant
+# 🌾 AgroScan AI
 
 **An AI-powered web application for diagnosing rice leaf diseases and answering related questions using computer vision and natural language processing.**
 
