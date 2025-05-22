@@ -11,7 +11,7 @@
 
 A lot of farmers in Nigeria often struggle with the timely identification of crop diseases, particularly in rice production. Delays in diagnosis—due to the distance or unavailability of crop management teams—can lead to severe damage and significant yield loss.
 
-The **AI-Powered LeafScan Assistant** bridges this gap by enabling farmers to:
+**AgroScan AI Assistant** bridges this gap by enabling farmers to:
 
 - Instantly **scan rice leaves using their phone**
 - **Identify potential diseases** using a CNN-powered model
