@@ -191,6 +191,16 @@ if "last_answer" in st.session_state:
     st.success("Answer:")
     st.write(st.session_state["last_answer"])
 
+
+# Contact an Expert Section
+st.markdown("---")
+st.markdown("### Need Further Help?")
+st.markdown(
+    "Contact an **Agronomist or Plant Pathologist** for personalized support.\n\n"
+    "**WhatsApp:** [Click here to chat with us](https://wa.me/2348136626696)\n\n"
+    "**Phone:** +2348136626696"
+)
+
 # -------------------------------
 # Clear Button (Moved to Bottom)
 # -------------------------------
